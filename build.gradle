@@ -1,0 +1,37 @@
+plugins {
+  id 'groovy'
+  id 'com.gradle.plugin-publish' version '0.9.8'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile gradleApi()
+  compile localGroovy()
+  testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+    exclude module: 'groovy-all'
+  }
+  testCompile 'cglib:cglib-nodep:3.1'
+}
+
+group = 'io.invertase.gradle'
+version = System.getenv('CIRCLE_TAG') ?: 'SNAPSHOT'
+
+pluginBundle {
+  website = 'https://github.com/invertase/react-native-gradle-plugin'
+  vcsUrl = 'https://github.com/invertase/react-native-gradle-plugin'
+  description = 'React Native Plugin'
+  tags = ['react-native', 'react', 'firebase', 'invertase']
+
+  plugins {
+    reactNativePlugin {
+      id = 'io.invertase.gradle.react-native'
+      displayName = 'React Native Plugin'
+    }
+  }
+}

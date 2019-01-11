@@ -1,0 +1,7 @@
+plugins {
+    id 'io.invertase.gradle.react-native'
+}
+
+task test << {
+    assert project.plugins.hasPlugin('io.invertase.gradle.react-native')
+}
