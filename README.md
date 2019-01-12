@@ -45,7 +45,7 @@ TODO
    - example [settings.gradle](https://gist.github.com/Salakar/7a9e1f1552c0c7dcc9ae3290089fbacd) & [a settings plugin example](/src/main/groovy/io/invertase/gradle/settings/SettingsPlugin.groovy)
  - It's possible (have a PoC working) to automatically load `ReactPackages` provided by RN modules without needing to constantly modify `MainApplication.java` (via Reflection)
    - a plugin could specify these package classes to java via `buildConfigField`s
-   - example [MainApplication.java](https://gist.github.com/Salakar/91f0d52e77c984381ae787c2dcb0d685)
+   - example reflection usage [MainApplication.java](https://gist.github.com/Salakar/91f0d52e77c984381ae787c2dcb0d685)
 
 
 Example usage below of WIP features. This is of a React Native Module's build gradle file.
