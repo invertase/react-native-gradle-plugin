@@ -1,14 +1,11 @@
 ./build
 .gradle/
-
-# IDEA
+./repo
 .idea
 out/
 *.iml
 *.ipr
 *.iws
-
-# Eclipse
 bin/
 .settings/
 .classpath

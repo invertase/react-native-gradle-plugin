@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.invertase.gradle'
-version = System.getenv('CIRCLE_TAG') ?: 'SNAPSHOT'
+version = System.getenv('CIRCLE_TAG') ?: '1.0-SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -36,9 +36,13 @@ pluginBundle {
   tags = ['react-native', 'react', 'firebase', 'invertase']
 
   plugins {
-    reactNativePlugin {
-      id = 'io.invertase.gradle.react-native'
-      displayName = 'React Native Plugin'
+    reactNativeBuildPlugin {
+      id = 'io.invertase.gradle.react-native.build'
+      displayName = 'React Native Settings Plugin'
+    }
+    reactNativeSettingsPlugin {
+      id = 'io.invertase.gradle.react-native.settings'
+      displayName = 'React Native Settings Plugin'
     }
   }
 }

@@ -1,5 +1,6 @@
-package io.invertase.gradle
+package io.invertase.gradle.build
 
+import io.invertase.gradle.common.WithExtensions
 import org.gradle.api.Project
 
 class ReactNativeProject implements WithExtensions {

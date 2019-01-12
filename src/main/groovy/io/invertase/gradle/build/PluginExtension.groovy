@@ -1,4 +1,4 @@
-package io.invertase.gradle
+package io.invertase.gradle.build
 
 import org.gradle.api.GradleException
 import org.gradle.api.Project

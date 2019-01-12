@@ -1,4 +1,4 @@
-package io.invertase.gradle;
+package io.invertase.gradle.common;
 
 import org.gradle.util.GradleVersion;
 
