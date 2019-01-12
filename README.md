@@ -38,7 +38,7 @@ TODO
  - Support for injecting Java Constants constants (buildConfigField) into app from a JS script / package.json config
  - Support for injecting Android Resources (resValue) into app from a JS script / package.json config
 
-*Random experiments:*
+**Random experiments:**
 
  - It's possible (have a PoC working) for the plugin to automatically add in React Native module projects into the build without ever needing to modify/add to `settings.gradle`
    - this stuff: `project(':@react-native-firebase/app').projectDir = new File(rootProject.projectDir, './../../packages/app/android')`
