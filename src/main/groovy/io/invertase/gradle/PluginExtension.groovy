@@ -104,6 +104,4 @@ class PluginExtension {
 
     return value
   }
-
-
 }

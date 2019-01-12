@@ -33,7 +33,7 @@ TODO
 
  - Standardise Projects being able to override android/gradle/tools sdk versions of React Native Modules
  - Standardise Projects being able to override dependency versions of React Native Modules
- - Built-in inspections (warning logs & suggested solutions) for common build mistakes, e.g. `duplicate dex`
+ - Built-in inspections (warning logs & suggested solutions) for common build mistakes/errors, e.g. `duplicate dex`
  - Automatic Android Project & React Native module versioning based on the version in your `package.json` file
  - Support for injecting Java Constants constants (buildConfigField) into app from a JS script / package.json config
  - Support for injecting Android Resources (resValue) into app from a JS script / package.json config
