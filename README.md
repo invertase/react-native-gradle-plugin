@@ -31,7 +31,14 @@ TODO
 
 ## Planned Features
 
-Example usage below of WIP features. Example is of a React Native Module's build gradle file.
+ - Standardise Projects being able to override android/gradle/tools sdk versions of React Native Modules
+ - Standardise Projects being able to override dependency versions of React Native Modules
+ - Built-in inspections (warning logs & suggested solutions) for common build mistakes, e.g. `duplicate dex`
+ - Automatic Android Project & React Native module versioning based on the version in your `package.json` file
+ - Support for injecting Java Constants constants (buildConfigField) into app from a JS script / package.json config
+ - Support for injecting Android Resources (resValue) into app from a JS script / package.json config
+
+Example usage below of WIP features. This is of a React Native Module's build gradle file.
 
 ```groovy
 plugins {
@@ -95,7 +102,7 @@ project.ext {
 
     // toggle on/off plugin inspections/warning helpers
     // the warnings trigger either on build failure or
-    // when a possible configuration issue has been detected in debug build
+    // when a possible configuration issue has been detected in debug build.
     warnings: [
       duplicateDex       : false,
 
