@@ -5,7 +5,6 @@ import org.gradle.api.Project
 
 class ReactNativeProject implements WithExtensions {
   private Project project
-
   ReactNativeProject(Project project) {
     this.project = project
   }

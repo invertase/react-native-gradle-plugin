@@ -8,7 +8,6 @@ import org.gradle.api.Project
 class ReactNativeModule implements WithExtensions {
   private Project project
   private Project rootProject
-
   ReactNativeModule(Project project) {
     this.project = project
     this.rootProject = project.rootProject
@@ -19,6 +18,9 @@ class ReactNativeModule implements WithExtensions {
     }
   }
 
+  /**
+   *
+   */
   void applyAndroidVersions() {
     ProjectExtension ext = ProjectExtension.getSharedInstance()
     project.android {
