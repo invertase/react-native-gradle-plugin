@@ -1,26 +1,33 @@
 plugins {
+  id 'java'
   id 'groovy'
-  id 'com.gradle.plugin-publish' version '0.9.8'
+  id 'maven'
+  id 'com.gradle.plugin-publish' version '0.10.0'
 }
+
+group 'io.invertase.gradle'
+version = System.getenv('CIRCLE_TAG') ?: 'SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
-  jcenter()
+  mavenCentral()
 }
 
 dependencies {
   compile gradleApi()
   compile localGroovy()
-  testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
-    exclude module: 'groovy-all'
-  }
-  testCompile 'cglib:cglib-nodep:3.1'
+  testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-group = 'io.invertase.gradle'
-version = System.getenv('CIRCLE_TAG') ?: 'SNAPSHOT'
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: uri('repo'))
+    }
+  }
+}
 
 pluginBundle {
   website = 'https://github.com/invertase/react-native-gradle-plugin'

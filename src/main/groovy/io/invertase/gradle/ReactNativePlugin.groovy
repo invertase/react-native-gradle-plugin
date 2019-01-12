@@ -13,15 +13,17 @@ class ReactNativePlugin implements Plugin<Project>, WithExtensions {
     this.project = project
 
     if (project == project.rootProject) {
+      PluginExtension.getSharedInstance().setProject(project, true)
       this.reactNativeProject = new ReactNativeProject(project)
     } else {
+      PluginExtension.getSharedInstance().setProject(project, false)
       this.reactNativeModule = new ReactNativeModule(project)
     }
 
-    applyExtensions()
+    createExtensions()
   }
 
-  private void applyExtensions() {
+  private void createExtensions() {
     LinkedHashMap<String, LinkedHashMap<String, Closure>> extensions = getExtensions()
 
     if (reactNativeProject) {
@@ -39,10 +41,7 @@ class ReactNativePlugin implements Plugin<Project>, WithExtensions {
   LinkedHashMap getExtensions() {
     return [
       (getName()): [
-        configure                    : this.&configure,
-        customVersionOrDefault       : this.&customVersionOrDefault,
-        addLocalReactNativeDependency: this.&addLocalReactNativeDependency,
-        applyAndroidVersions         : this.&applyAndroidVersions
+        getName: this.&getName
       ]
     ]
   }
