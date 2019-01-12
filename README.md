@@ -13,11 +13,20 @@
 
 ----
 
-A gradle plugin for React Native Android that simplifies build configurations and versioning for projects & native modules.
+A gradle plugin for React Native Android that simplifies and standardises build configurations (including versioning) for both Projects & React Native modules.
 
 ## Installation
 
-TODO
+Add the plugin to your `build.gradle`;
+
+```groovy
+plugins {
+  id "io.invertase.gradle.react-native.build"
+}
+
+
+apply plugin: "io.invertase.gradle.build"
+```
 
 ## For Projects
 
