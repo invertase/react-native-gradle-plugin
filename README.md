@@ -40,7 +40,7 @@ plugins {
 
 // this React Native module defines its defaults
 // a users project consuming this module can override 
-// the values below by creating the same format
+// the values below by creating the same format (without needing the plugin)
 project.ext {
   set('react-native', [
     versions: [
