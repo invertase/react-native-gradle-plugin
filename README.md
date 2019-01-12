@@ -46,7 +46,11 @@ project.ext {
     versions: [
       // --->
       // built in scopes
-      // --->      
+      // --->
+      
+      
+      // also backwards compatible with the currently
+      // used `rootProject.ext.get('minSdkVersion')` extensions   
       android           : [
         minSdk    : 16,
         targetSdk : 28,
@@ -77,6 +81,7 @@ project.ext {
         // etc
       ],
     ],
+    
     options : [
       // specify a custom react native source directory
       // relative to <YOUR_PROJECT>/android
