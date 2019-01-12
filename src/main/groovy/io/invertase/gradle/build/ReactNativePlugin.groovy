@@ -14,10 +14,10 @@ class ReactNativePlugin implements Plugin<Project>, WithExtensions {
     this.project = project
 
     if (project == project.rootProject) {
-      PluginExtension.getSharedInstance().setProject(project, true)
+      ProjectExtension.getSharedInstance().setProject(project, true)
       this.reactNativeProject = new ReactNativeProject(project)
     } else {
-      PluginExtension.getSharedInstance().setProject(project, false)
+      ProjectExtension.getSharedInstance().setProject(project, false)
       this.reactNativeModule = new ReactNativeModule(project)
     }
 

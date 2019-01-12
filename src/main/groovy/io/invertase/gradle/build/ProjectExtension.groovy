@@ -3,10 +3,18 @@ package io.invertase.gradle.build
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 
-class PluginExtension {
+class ProjectExtension {
   private Project project
   private Boolean isRoot
-  private static sharedInstance = new PluginExtension()
+  private static sharedInstance = new ProjectExtension()
+
+  public static String OPTION_RN_ANDROID_DIR = "reactNativeAndroidDir"
+  public static String OPTION_USE_PACKAGE_VERSION = "usePackageVersion"
+
+  private LinkedHashMap OPTION_DEFAULTS = [
+    (OPTION_RN_ANDROID_DIR)     : null,
+    (OPTION_USE_PACKAGE_VERSION): false,
+  ]
 
   private String KEY_REACT_NATIVE = "react-native"
 
@@ -14,7 +22,7 @@ class PluginExtension {
    *
    * @return
    */
-  static PluginExtension getSharedInstance() {
+  static ProjectExtension getSharedInstance() {
     return sharedInstance
   }
 
@@ -26,6 +34,16 @@ class PluginExtension {
   void setProject(Project project, Boolean isRoot) {
     this.project = project
     this.isRoot = isRoot
+  }
+
+  Object getOption(String option, Boolean rootProject = false) {
+    LinkedHashMap reactNativeRoot = getReactNativeRoot(rootProject)
+
+    if (reactNativeRoot.options != null && reactNativeRoot.options[option] != null) {
+      return reactNativeRoot.options[option]
+    }
+
+    return OPTION_DEFAULTS[option]
   }
 
 
