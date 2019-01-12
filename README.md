@@ -41,7 +41,7 @@ TODO
 **Random experiments:**
 
  - It's possible (have a PoC working) for the plugin to automatically add in React Native module projects into the build without ever needing to modify/add to `settings.gradle`
-   - this stuff: `project(':@react-native-firebase/app').projectDir = new File(rootProject.projectDir, './../../packages/app/android')`
+   - none of this stuff: `project(':@react-native-firebase/app').projectDir = new File(rootProject.projectDir, './../../packages/app/android')`
    - example [settings.gradle](https://gist.github.com/Salakar/7a9e1f1552c0c7dcc9ae3290089fbacd) & [a settings plugin example](/src/main/groovy/io/invertase/gradle/settings/SettingsPlugin.groovy)
  - It's possible (have a PoC working) to automatically load `ReactPackages` provided by RN modules without needing to constantly modify `MainApplication.java` (via Reflection)
    - a plugin could specify these package classes to java via `buildConfigField`s
