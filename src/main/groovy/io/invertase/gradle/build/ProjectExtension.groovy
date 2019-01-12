@@ -36,6 +36,12 @@ class ProjectExtension {
     this.isRoot = isRoot
   }
 
+  /**
+   *
+   * @param option
+   * @param rootProject
+   * @return
+   */
   Object getOption(String option, Boolean rootProject = false) {
     LinkedHashMap reactNativeRoot = getReactNativeRoot(rootProject)
 
