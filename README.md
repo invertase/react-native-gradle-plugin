@@ -44,6 +44,9 @@ plugins {
 project.ext {
   set('react-native', [
     versions: [
+      // --->
+      // built in scopes
+      // --->      
       android           : [
         minSdk    : 16,
         targetSdk : 28,
@@ -60,18 +63,19 @@ project.ext {
 
       googlePlayServices: [
         base: "16.0.1",
+        
+        // e.g. custom ones:
         // auth: "16.0.1",
         // maps: "16.0.0",
       ],
-
+      
+      // --->
+      // RN modules can add more scopes with versions here
+      // --->
       firebase          : [
         core: "16.0.6",
         // etc
       ],
-
-      // --->
-      // RN modules can add more scopes with versions here
-      // --->
     ],
     options : [
       // specify a custom react native source directory
