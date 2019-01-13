@@ -8,6 +8,7 @@ import org.gradle.api.Project
 class ReactNativeModule implements WithExtensions {
   private Project project
   private Project rootProject
+
   ReactNativeModule(Project project) {
     this.project = project
     this.rootProject = project.rootProject
@@ -24,18 +25,18 @@ class ReactNativeModule implements WithExtensions {
   void applyAndroidVersions() {
     ProjectExtension ext = ProjectExtension.getSharedInstance()
     project.android {
-      compileSdkVersion ext.getCustomVersionOrDefault('android', 'compileSdk')
+      compileSdkVersion ext.getVersion('android', 'compileSdk')
 
       // Android plugin for Gradle 3.0.0 or higher automatically uses a default version of
       // the build tools that the plugin specifies.
       // @url https://developer.android.com/studio/releases/build-tools
       if (Utilities.isGradleVersionLT('3.0')) {
-        buildToolsVersion ext.getCustomVersionOrDefault('android', 'buildTools')
+        buildToolsVersion ext.getVersion('android', 'buildTools')
       }
 
       defaultConfig {
-        targetSdkVersion ext.getCustomVersionOrDefault('android', 'targetSdk')
-        minSdkVersion ext.getCustomVersionOrDefault('android', 'minSdk')
+        targetSdkVersion ext.getVersion('android', 'targetSdk')
+        minSdkVersion ext.getVersion('android', 'minSdk')
       }
     }
   }
@@ -44,10 +45,10 @@ class ReactNativeModule implements WithExtensions {
    *
    * @param type
    */
-  void addReactNativeDependency(type) {
+  void applyReactNativeDependency(String type) {
     Boolean found = false
     File defaultDir = null
-    String androidSourcesName = "React Native sources"
+    String androidSourcesName = "${project.name} -> React Native sources"
     String customDir = ProjectExtension.getSharedInstance().getOption(ProjectExtension.OPTION_RN_ANDROID_DIR, true)
 
     if (customDir != null) {
@@ -70,61 +71,52 @@ class ReactNativeModule implements WithExtensions {
 
 
     if (defaultDir.exists()) {
-      project.repositories {
-        maven {
-          url defaultDir.toString()
-          name androidSourcesName
-        }
-      }
+      project.repositories.add(project.repositories.maven {
+        url defaultDir.toString()
+        name androidSourcesName
+      })
 
-      println ":${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${defaultDir.canonicalPath}"
+      println ":default:${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${defaultDir.canonicalPath}"
+      found = true
+    } else {
+      File parentDir = rootProject.projectDir
 
-      return
-    }
+      for (int i = 0; i < 5; i++) {
+        parentDir = parentDir.parentFile
 
+        File androidSourcesDir = new File(
+          parentDir,
+          'node_modules/react-native'
+        )
 
-    File parentDir = rootProject.projectDir
+        File androidPrebuiltBinaryDir = new File(
+          parentDir,
+          'node_modules/react-native/android'
+        )
 
-    for (int i = 0; i < 5; i++) {
-      parentDir = parentDir.parentFile
-
-      File androidSourcesDir = new File(
-        parentDir,
-        'node_modules/react-native'
-      )
-
-      File androidPrebuiltBinaryDir = new File(
-        parentDir,
-        'node_modules/react-native/android'
-      )
-
-      if (androidPrebuiltBinaryDir.exists()) {
-        project.repositories {
-          maven {
+        if (androidPrebuiltBinaryDir.exists()) {
+          project.repositories.add(project.repositories.maven {
             url androidPrebuiltBinaryDir.toString()
             name androidSourcesName
-          }
+          })
+
+          println ":1:${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidPrebuiltBinaryDir.canonicalPath}"
+          found = true
+          break
         }
 
-        println ":${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidPrebuiltBinaryDir.canonicalPath}"
-        found = true
-        break
-      }
-
-      if (androidSourcesDir.exists()) {
-        project.repositories {
-          maven {
+        if (androidSourcesDir.exists()) {
+          project.repositories.add(project.repositories.maven {
             url androidSourcesDir.toString()
             name androidSourcesName
-          }
-        }
+          })
 
-        println ":${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidSourcesDir.canonicalPath}"
-        found = true
-        break
+          println ":3:${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidSourcesDir.canonicalPath}"
+          found = true
+          break
+        }
       }
     }
-
 
     if (!found) {
       throw new GradleException(
@@ -133,25 +125,22 @@ class ReactNativeModule implements WithExtensions {
       )
     }
 
-
     switch (type) {
       case "implementation":
-        project.dependencies {
-          implementation "com.facebook.react:react-native:+"
-        }
+        project.dependencies.add("implementation", "com.facebook.react:react-native:+")
         break
       default:
-        project.dependencies {
-          api "com.facebook.react:react-native:+"
-        }
+        project.dependencies.add("api", "com.facebook.react:react-native:+")
     }
   }
 
 
   @Override
   LinkedHashMap getExtensions() {
+    ReactNativeModule target = this
     return [
-      applyAndroidVersions: this.&applyAndroidVersions
+      applyAndroidVersions      : target.&applyAndroidVersions,
+      applyReactNativeDependency: target.&applyReactNativeDependency,
     ]
   }
 

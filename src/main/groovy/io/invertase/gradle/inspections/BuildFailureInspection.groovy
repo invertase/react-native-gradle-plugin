@@ -55,7 +55,7 @@ class BuildFailureInspection {
   void printDuplicateDex() {
     logger.error("")
     logger.error(" -----------------------------------------------------------")
-    logger.error("|                         REACT NATIVE                      |")
+    logger.error("|                REACT NATIVE (Gradle Plugin)               |")
     logger.error(" ----------------------------------------------------------- ")
     logger.error("|                                                           |")
     logger.error("|  This is a common build error when using libraries that   |")

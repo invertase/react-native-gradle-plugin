@@ -36,13 +36,9 @@ pluginBundle {
   tags = ['react-native', 'react', 'firebase', 'invertase']
 
   plugins {
-    reactNativeBuildPlugin {
-      id = 'io.invertase.gradle.react-native.build'
-      displayName = 'React Native Settings Plugin'
-    }
-    reactNativeSettingsPlugin {
-      id = 'io.invertase.gradle.react-native.settings'
-      displayName = 'React Native Settings Plugin'
+    reactNativePlugin {
+      id = 'io.invertase.gradle'
+      displayName = 'React Native Plugin'
     }
   }
 }

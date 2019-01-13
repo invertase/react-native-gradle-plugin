@@ -42,7 +42,7 @@ class ProjectExtension {
    * @param rootProject
    * @return
    */
-  Object getOption(String option, Boolean rootProject = false) {
+  public Object getOption(String option, Boolean rootProject = false) {
     LinkedHashMap reactNativeRoot = getReactNativeRoot(rootProject)
 
     if (reactNativeRoot.options != null && reactNativeRoot.options[option] != null) {
@@ -57,7 +57,7 @@ class ProjectExtension {
    *
    * @return
    */
-  LinkedHashMap getReactNativeRoot(Boolean rootProject = false) {
+  public LinkedHashMap getReactNativeRoot(Boolean rootProject = false) {
     Project target = rootProject ? project.rootProject : project
 
     if (target.ext.has(KEY_REACT_NATIVE)) {
@@ -73,7 +73,7 @@ class ProjectExtension {
    * @param rootProject
    * @return
    */
-  LinkedHashMap getReactNativeRootChild(String child, Boolean rootProject = false) {
+  public LinkedHashMap getReactNativeRootChild(String child, Boolean rootProject = false) {
     LinkedHashMap reactNativeRoot = getReactNativeRoot(rootProject)
     return (reactNativeRoot[child] != null ? reactNativeRoot[child] : [:]) as LinkedHashMap
   }
@@ -84,7 +84,7 @@ class ProjectExtension {
    * @param rootProject
    * @return
    */
-  LinkedHashMap getVersionsRoot(Boolean rootProject = false) {
+  public LinkedHashMap getVersionsRoot(Boolean rootProject = false) {
     return getReactNativeRootChild("versions", rootProject)
   }
 
@@ -94,18 +94,18 @@ class ProjectExtension {
    * @param name
    * @return
    */
-  Object getCustomVersionOrDefault(String scope, String name) {
+  public Object getVersion(String scope, String name) {
     LinkedHashMap projectVersions = getVersionsRoot(false)
     LinkedHashMap rootProjectVersions = getVersionsRoot(true)
 
     if (!projectVersions[scope]) {
-      throw new GradleException("${project.name} has not defined project.ext.'react-native'.versions.${scope} in its build.gradle file.")
+      throw new GradleException(":${project.name} has not defined a default in project.ext.'react-native'.versions.${scope} in its build.gradle file.")
     }
 
     def defaultValue = projectVersions[scope][name]
 
     if (defaultValue == null) {
-      throw new GradleException("${project.name} has not defined project.ext.'react-native'.versions.${scope}.${name} in its build.gradle file.")
+      throw new GradleException(":${project.name} has not defined a default in project.ext.'react-native'.versions.${scope}.${name} in its build.gradle file.")
     }
 
     def defaulted = true
@@ -121,9 +121,9 @@ class ProjectExtension {
     }
 
     if (defaulted) {
-      println "${project.name}:${scope}.${name} using default value: ${defaultValue}"
+      println ":${project.name}:${scope}.${name} using default value: ${defaultValue}"
     } else {
-      println "${project.name}:${scope}.${name} using custom value: ${defaultValue}"
+      println ":${project.name}:${scope}.${name} using custom value: ${defaultValue}"
     }
 
     return value
