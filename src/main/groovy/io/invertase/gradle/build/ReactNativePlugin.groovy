@@ -1,6 +1,5 @@
 package io.invertase.gradle.build
 
-import io.invertase.gradle.common.PackageJson
 import io.invertase.gradle.common.Utilities
 import io.invertase.gradle.common.WithExtensions
 import org.gradle.api.Plugin
@@ -15,8 +14,6 @@ class ReactNativePlugin implements Plugin<Project>, WithExtensions {
   @Override
   void apply(Project project) {
     this.project = project
-
-    print PackageJson.getForProject(project)
 
     if (project == project.rootProject) {
       ProjectExtension.getSharedInstance().setProject(project, true)
