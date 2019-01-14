@@ -76,7 +76,7 @@ class ReactNativeModule implements WithExtensions {
         name androidSourcesName
       })
 
-      println ":default:${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${defaultDir.canonicalPath}"
+      println ":${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${defaultDir.canonicalPath}"
       found = true
     } else {
       File parentDir = rootProject.projectDir
@@ -100,7 +100,7 @@ class ReactNativeModule implements WithExtensions {
             name androidSourcesName
           })
 
-          println ":1:${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidPrebuiltBinaryDir.canonicalPath}"
+          println ":${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidPrebuiltBinaryDir.canonicalPath}"
           found = true
           break
         }
@@ -111,7 +111,7 @@ class ReactNativeModule implements WithExtensions {
             name androidSourcesName
           })
 
-          println ":3:${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidSourcesDir.canonicalPath}"
+          println ":${project.name}:${ProjectExtension.OPTION_RN_ANDROID_DIR} ${androidSourcesDir.canonicalPath}"
           found = true
           break
         }
