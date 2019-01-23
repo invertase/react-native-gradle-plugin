@@ -53,8 +53,8 @@ class ReactNativeModule implements WithExtensions {
 
     if (customDir != null) {
       defaultDir = new File(
-        project.projectDir,
-        customDir
+        (File) project.projectDir,
+        (String) customDir
       )
 
       if (!defaultDir.exists()) {
@@ -64,8 +64,8 @@ class ReactNativeModule implements WithExtensions {
       }
     } else {
       defaultDir = new File(
-        project.projectDir,
-        '/../../../node_modules/react-native/android'
+        (File) project.projectDir,
+        (String) "/../../../node_modules/react-native/android"
       )
     }
 
@@ -85,13 +85,13 @@ class ReactNativeModule implements WithExtensions {
         parentDir = parentDir.parentFile
 
         File androidSourcesDir = new File(
-          parentDir,
-          'node_modules/react-native'
+          (File) parentDir,
+          (String) "node_modules/react-native"
         )
 
         File androidPrebuiltBinaryDir = new File(
-          parentDir,
-          'node_modules/react-native/android'
+          (File) parentDir,
+          (String) "node_modules/react-native/android"
         )
 
         if (androidPrebuiltBinaryDir.exists()) {

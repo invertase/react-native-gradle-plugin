@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.invertase.gradle'
-version = System.getenv('CIRCLE_TAG') ?: '1.1.˚1'
+version = System.getenv('CIRCLE_TAG') ?: '1.2'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
