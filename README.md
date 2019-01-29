@@ -213,6 +213,11 @@ project.ext {
  - Support for injecting Java constants (`buildConfigField`) into your app from a JS script, `package.json` or `app.json`
  - Support for injecting Android Resources (resValue) into app from a JS script, `package.json` or `app.json`
 
+## 💛 React Native Modules using this plugin
+
+ - [React Native Firebase](https://github.com/invertase/react-native-firebase)
+
+*Submit a PR to add your React Native module(s) here.*
 
 ## License
 
