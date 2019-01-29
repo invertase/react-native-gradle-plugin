@@ -43,7 +43,9 @@ class ReactNativeShared implements WithExtensions {
 
       int major = Integer.parseInt(tokens[0])
       int minor = Integer.parseInt(tokens[1])
-      int patch = Integer.parseInt(tokens[2])
+
+      // additionally strips pre-releases off patch
+      int patch = Integer.parseInt(tokens[2].tokenize('-')[0])
 
       int code = major * 1000000 + minor * 1000 + patch
 
