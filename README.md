@@ -15,148 +15,165 @@
 
 A gradle plugin for React Native Android that simplifies and standardises build configurations (including versioning) for both Projects & React Native modules.
 
+#### Current Features
+
+ - Android app / React Native module auto-versioning using the version defined in your `package.json`
+ - Standardise overriding android/gradle/tools sdk versions of React Native Modules
+ - Standardise overriding dependency versions of React Native Modules, e.g. Firebase Android sdks
+ - Built-in inspections (warning logs & suggested solutions) for common build mistakes/errors, e.g. `duplicate dex`
+
 ## Installation
 
 Add the plugin to your `build.gradle`;
 
+**Groovy**:
 ```groovy
 plugins {
-  id "io.invertase.gradle.react-native.build"
+  id "io.invertase.gradle.build" version "1.3"
 }
-
-
-apply plugin: "io.invertase.gradle.build"
 ```
 
-## For Projects
+**Kotlin**:
+```kotlin
+plugins {
+  id("io.invertase.gradle.build") version "1.3"
+}
+```
 
-TODO
+This must be added after your `buildscript` block.
 
-## For React Native Modules
+## Usage
 
+### For Projects & React Native Modules
 
-TODO
+#### Versioning Overrides
 
-
-## Planned Features
-
- - Standardise Projects being able to override android/gradle/tools sdk versions of React Native Modules
- - Standardise Projects being able to override dependency versions of React Native Modules
- - Built-in inspections (warning logs & suggested solutions) for common build mistakes/errors, e.g. `duplicate dex`
- - Automatic Android Project & React Native module versioning based on the version in your `package.json` file
- - Support for injecting Java Constants constants (buildConfigField) into app from a JS script / package.json config
- - Support for injecting Android Resources (resValue) into app from a JS script / package.json config
-
-**Random experiments:**
-
- - It's possible (have a PoC working) for the plugin to automatically add in React Native module projects into the build without ever needing to modify/add to `settings.gradle`
-   - none of this stuff: `project(':@react-native-firebase/app').projectDir = new File(rootProject.projectDir, './../../packages/app/android')`
-   - example [settings.gradle](https://gist.github.com/Salakar/7a9e1f1552c0c7dcc9ae3290089fbacd) & [a settings plugin example](/src/main/groovy/io/invertase/gradle/settings/SettingsPlugin.groovy)
- - It's possible (have a PoC working) to automatically load `ReactPackages` provided by RN modules without needing to constantly modify `MainApplication.java` (via Reflection)
-   - a plugin could specify these package classes to java via `buildConfigField`s
-   - example reflection usage [MainApplication.java](https://gist.github.com/Salakar/91f0d52e77c984381ae787c2dcb0d685)
-
-
-Example usage below of WIP features. This is of a React Native Module's build gradle file.
+Add a versions configuration to your app build gradle, for example; 
 
 ```groovy
-plugins {
-  id "io.invertase.gradle.react-native"
-}
-
-// this React Native module defines its defaults
-// a users project consuming this module can override 
-// the values below by creating the same format (without needing the plugin)
 project.ext {
   set('react-native', [
     versions: [
-      // --->
-      // built in scopes
-      // --->
-      
-      
-      // also backwards compatible with the currently
-      // used `rootProject.ext.get('minSdkVersion')` extensions   
+      // Android version section can be automatically applied by calling 
+      // ReactNative.module.applyAndroidVersions()
+      //    or
+      // ReactNative.project.applyAndroidVersions()
+      // android version section supports legacy behavior e.g.:
+      //    project.ext.compileSdkVersion
       android           : [
         minSdk    : 16,
         targetSdk : 28,
         compileSdk: 28,
-        
-        // only need to set this if you need to use a
-        // custom version or if your Gradle version is < 3.0
+        // optional as gradle.buildTools comes with one by default
         // buildTools: "28.0.3"
-      ],
-
-      gradle            : [
-        buildTools: "3.2.1"
       ],
 
       googlePlayServices: [
         base: "16.0.1",
-        
-        // e.g. custom ones:
-        // auth: "16.0.1",
-        // maps: "16.0.0",
+        // additional version sub sections as defined by native module authors
+        // e.g maps:
+        maps: "16.0.1",
       ],
-      
-      // --->
-      // RN modules can add more scopes with versions here
-      // --->
+
+      // additional version sections can be defined by
+      // native module authors, e.g. React Native Firebase:
       firebase          : [
-        core: "16.0.6",
-        // etc
+        functions: "16.1.3"
       ],
     ],
-    
-    options : [
-      // specify a custom react native source directory
-      // relative to <YOUR_PROJECT>/android
-      // automatically detects location already
-      // reactNativeAndroidDir: "/../../../node_modules/react-native/android",
-
-      // set the version of this module/project to
-      // be the version from your package.json file
-      usePackageVersion: true,
-    ],
-
-    // toggle on/off plugin inspections/warning helpers
-    // the warnings trigger either on build failure or
-    // when a possible configuration issue has been detected in debug build.
-    warnings: [
-      duplicateDex       : false,
-
-      jcenterBeforeGoogle: false,
-
-      // any others?
-    ]
   ])
 }
-
-buildscript {
-  repositories {
-    google()
-    jcenter()
-  }
-}
-
-repositories {
-  google()
-  jcenter()
-}
-
-dependencies {
-  implementation "com.google.firebase:firebase-core:${ReactNative.plugin.getVersionOrDefault("firebase", "core")}"
-  implementation "com.google.android.gms:play-services-base:${ReactNative.plugin.getVersionOrDefault("googlePlayServices", "base")}"
-}
-
-// compile, target & build sdks, etc
-ReactNative.module.applyAndroidVersions()
-
-// custom maven { } to add RN sources to project
-ReactNative.module.addReactNativeDependency()
 ```
 
- 
+These additionally form the default versions when used in a react native module. 
+
+**Example: Using a version**
+
+```groovy
+dependencies {
+  api project(':@react-native-firebase/app')
+  // getVersion() first looks for the overridden version defined in the consumers project
+  // if non is found; it falls back to the default version defined in the React Native modules' build.gradle, as above
+  implementation "com.google.firebase:firebase-functions:${ReactNative.ext.getVersion("firebase", "functions")}"
+  implementation "com.google.android.gms:play-services-base:${ReactNative.ext.getVersion("googlePlayServices", "base")}"
+}
+```
+
+#### Android build versioning using `package.json` version
+
+Android builds can specify a build code and version name, e.g.:
+
+```groovy
+android {
+  defaultConfig {
+    versionCode 1
+    versionName "1.0"
+  }
+}
+```
+
+Updating this every time you need to publish your app can be avoided by having it default to using the 
+version defined in your projects `package.json` file, the process is explained [here](https://medium.com/@andr3wjack/versioning-react-native-apps-407469707661) 
+in-depth by @AndrewJack.
+
+This can be automated with this gradle plugin by adding the following to your app (or RN module) `build.gradle`:
+
+```groovy
+ReactNative.shared.applyPackageVersion()
+```
 
 
+#### Excluding common META-INF files
 
+`META-INF` files can cause `'duplicate file'` build failures if they're not excluded, this plugin allows excluding the 
+most common types of these files by adding  the following to your app (or RN module) `build.gradle`:  
+
+
+```groovy
+ReactNative.shared.applyDefaultExcludes()
+```
+
+For reference this will inject the following config:
+
+```groovy
+android {
+  packagingOptions {
+    exclude 'META-INF/-no-jdk.kotlin_module'
+    exclude 'META-INF/DEPENDENCIES'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/NOTICE.txt'
+  }
+}
+```
+
+
+### For React Native Modules
+
+
+TODO docs:
+
+```groovy
+ReactNative.module.applyAndroidVersions()
+ReactNative.module.applyReactNativeDependency("api")
+```
+
+
+## Planned Features
+
+ - Support for injecting Java Constants constants (`buildConfigField`) into app from a JS script, `package.json` or `app.json`
+ - Support for injecting Android Resources (resValue) into app from a JS script, `package.json` or `app.json`
+
+
+## License
+
+- See [LICENSE](/LICENSE)
+
+----
+
+Built and maintained with 💛 by [Invertase](https://invertase.io). 
+
+- [💼 Hire Us](https://invertase.io/hire-us)
+- [☕️ Sponsor Us](https://opencollective.com/react-native-firebase)
+- [👩‍💻 Work With Us](https://invertase.io/jobs)
