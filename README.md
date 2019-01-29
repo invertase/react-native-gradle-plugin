@@ -99,6 +99,8 @@ dependencies {
 }
 ```
 
+---
+
 #### Android build versioning using `package.json` version
 
 Android builds can specify a build code and version name, e.g.:
@@ -122,6 +124,7 @@ This can be automated with this gradle plugin by adding the following to your ap
 ReactNative.shared.applyPackageVersion()
 ```
 
+---
 
 #### Excluding common META-INF files
 
@@ -148,6 +151,7 @@ android {
 }
 ```
 
+---
 
 ### For React Native Modules
 
@@ -174,6 +178,8 @@ android {
 
 `applyAndroidVersions()` is backwards compatible with the old format as above and internally checks for these as well as the new format.
 
+---
+
 #### Auto locate and add React Native as a dependency
 
 This adds the React Native custom maven repository like normal, but; with support for various scenarios whilst developing your android module locally without an app;
@@ -199,6 +205,8 @@ project.ext {
   ])
 }
 ```
+
+---
 
 ## Planned Features
 
