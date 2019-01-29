@@ -18,8 +18,8 @@ A gradle plugin for React Native Android that simplifies and standardises build 
 #### Current Features
 
  - Android app / React Native module auto-versioning using the version defined in your `package.json`
- - Standardise overriding android/gradle/tools sdk versions of React Native Modules
- - Standardise overriding dependency versions of React Native Modules, e.g. Firebase Android sdks
+ - Standardise overriding android/gradle/tools SDK versions of React Native Modules
+ - Standardise overriding dependency versions of React Native Modules, e.g. Firebase Android SDKs
  - Built-in inspections (warning logs & suggested solutions) for common build mistakes/errors, e.g. `duplicate dex`
 
 ## Installation
@@ -151,18 +151,58 @@ android {
 
 ### For React Native Modules
 
-
-TODO docs:
+#### Auto apply Android SDK versions
 
 ```groovy
 ReactNative.module.applyAndroidVersions()
+```
+
+This will apply the default versions or the user overridden versions of the android SDK versions specified in `react-native -> versions -> android { }`.
+
+This removes the need for the following (that most RN modules are currently doing):
+
+```groovy
+android {
+  compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+  buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
+  defaultConfig {
+    minSdkVersion rootProject.hasProperty('minSdkVersion') ? rootProject.minSdkVersion : DEFAULT_MIN_SDK_VERSION
+    targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+  }
+}
+```
+
+`applyAndroidVersions()` is backwards compatible with the old format as above and internally checks for these as well as the new format.
+
+#### Auto locate and add React Native as a dependency
+
+This adds the React Native custom maven repository like normal, but; with support for various scenarios whilst developing your android module locally without an app;
+
+ - automatically finds the right location of `node_modules/react-android` when opening your React Native Android module standalone in Android Studio
+ - mono-repo support for the above, e.g. React Native at the root package as a dev dependency
+ - specifying an exact location via options (`reactNativeAndroidDir`) - useful when testing your module against a fork of React Native located outside of your project or building React Native from sources
+
+```groovy
+// accepts "api" or "implementation" as dependency type arg
 ReactNative.module.applyReactNativeDependency("api")
 ```
 
+**Example: Specify exact location via options**:
+
+```groovy
+project.ext {
+  set('react-native', [
+    // ... other configs e.g. versions
+    options: [
+      reactNativeAndroidDir: "/../../../../my-react-native-fork/android"
+    ]
+  ])
+}
+```
 
 ## Planned Features
 
- - Support for injecting Java Constants constants (`buildConfigField`) into app from a JS script, `package.json` or `app.json`
+ - Support for injecting Java constants (`buildConfigField`) into your app from a JS script, `package.json` or `app.json`
  - Support for injecting Android Resources (resValue) into app from a JS script, `package.json` or `app.json`
 
 
