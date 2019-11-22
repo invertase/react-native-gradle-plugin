@@ -121,9 +121,9 @@ class ProjectExtension {
     }
 
     if (defaulted) {
-      println ":${project.name}:${scope}.${name} using default value: ${defaultValue}"
+      println ":${project.name}:${scope}.${name} using default value: ${value}"
     } else {
-      println ":${project.name}:${scope}.${name} using custom value: ${defaultValue}"
+      println ":${project.name}:${scope}.${name} using custom value: ${value}"
     }
 
     return value
