@@ -81,9 +81,7 @@ class ReactNativeModule implements WithExtensions {
     } else {
       File parentDir = rootProject.projectDir
 
-      for (int i = 0; i < 5; i++) {
-        parentDir = parentDir.parentFile
-
+      for (int i = 0; i < 6; i++) {
         File androidSourcesDir = new File(
           (File) parentDir,
           (String) "node_modules/react-native"
@@ -115,6 +113,8 @@ class ReactNativeModule implements WithExtensions {
           found = true
           break
         }
+
+        parentDir = parentDir.parentFile
       }
     }
 
