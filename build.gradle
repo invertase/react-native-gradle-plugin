@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.invertase.gradle'
-version = System.getenv('CIRCLE_TAG') ?: '1.4'
+version = System.getenv('PLUGIN_VERSION') ?: '1.4'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -46,3 +46,17 @@ pluginBundle {
     }
   }
 }
+
+task setupPluginUpload << {
+  def key = System.getenv('GRADLE_PUBLISH_KEY')
+  def secret = System.getenv('GRADLE_PUBLISH_SECRET')
+
+  if (!key || !secret) {
+    throw new RuntimeException("GRADLE_PUBLISH_KEY and/or GRADLE_PUBLISH_SECRET are not defined environment variables")
+  }
+
+  System.properties.setProperty("gradle.publish.key", key)
+  System.properties.setProperty("gradle.publish.secret", secret)
+}
+
+tasks.publishPlugins.dependsOn tasks.setupPluginUpload
