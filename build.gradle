@@ -2,7 +2,7 @@ plugins {
   id 'java'
   id 'groovy'
   id 'maven'
-  id 'com.gradle.plugin-publish' version '0.10.0'
+  id 'com.gradle.plugin-publish' version '0.12.0'
 }
 
 group 'io.invertase.gradle'
